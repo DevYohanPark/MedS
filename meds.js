@@ -4,12 +4,38 @@ web3.setProvider(provider);
 web3.eth.defaultAccount = web3.eth.accounts[0];
 var stop = false;
 
+var contractAddr = "0x40af181010193fbe1516877563c40cc88c72d95a";
 var ABI = [{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":false,"inputs":[{"name":"hashData","type":"string"}],"name":"putPhrHash","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"},{"name":"tokenDecimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"phrHashCount","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"phrHashes","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
-var MedS = web3.eth.contract(ABI).at("0x40af181010193fbe1516877563c40cc88c72d95a");
+var MedS = web3.eth.contract(ABI).at(contractAddr);
 
 /*** 병원 ***/
 function handData() {
     $('#data_pt').val($('#data_hp').val());
+}
+
+function sign() {
+    // validate
+    var hashData = web3.sha3($('#data_hp').val()).substring(0,32);
+    var userData = $('#tx_hp').val().split(":");
+    var txInfo = web3.eth.getTransaction(userData[1]);
+    if(txInfo)
+        var hashDataInBC = MedS.phrHashes(txInfo.from, userData[0]);
+
+    if(hashData != hashDataInBC) {
+        alert("데이터가 일치하지 않습니다.");
+        return;
+    }
+
+    // sign
+    $('#sign_hp').val("sign");
+}
+
+function wbcSign() {
+    $('#signtx_hp').val("signTx");
+}
+
+function handSignTxToPatient() {
+    $('#signtx_pt').val($('#signtx_hp').val());
 }
 
 /*** 환자 ***/
@@ -23,18 +49,6 @@ function hashing() {
     $('#hash_pt').val(hash);
 }
 
-function sign() {
-    $('#sign_hp').val("sign");
-}
-
-function wbcSign() {
-    $('#signtx_hp').val("signTx");
-}
-
-function handSignTxToPatient() {
-    $('#signtx_pt').val($('#signtx_hp').val());
-}
-
 function readTxInfoFromBlockchain(txHash) {
     var txInfo = web3.eth.getTransaction(txHash);
     if(txInfo.blockNumber)
@@ -46,9 +60,15 @@ function readTxInfoFromBlockchain(txHash) {
 }
 
 function wbcPhrHash() {
+    var phrIndex = MedS.phrHashCount(web3.eth.accounts[2]).c[0]
     var hashData = $('#hash_pt').val().substring(0,32);
-    var txHash = MedS.putPhrHash(hashData);
-    readTxInfoFromBlockchain(txHash);
+    var txHash = web3.eth.sendTransaction({
+        to: contractAddr
+        , from: web3.eth.accounts[2]
+        , data: MedS.putPhrHash.getData(hashData)});
+
+    //readTxInfoFromBlockchain(txHash);
+    $('#tx_pt').val(phrIndex + ":" + txHash);
 }
 
 function handTx() {
@@ -73,7 +93,6 @@ function startMonitor() {
     var table = document.getElementById('tbMonitor');
     for (; monitorBlockNo <= web3.eth.blockNumber; monitorBlockNo++) {
         var result = web3.eth.getBlock(monitorBlockNo);
-        //console.log(result);
         insertBlockRow(result, table, monitorBlockNo);
     }
     setTimeout(function() {
