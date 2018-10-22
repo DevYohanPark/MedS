@@ -122,12 +122,23 @@ function verify() {
 }
 
 function sendMedS() {
-
+    web3.eth.sendTransaction({
+        to: contractAddr
+        , from: web3.eth.accounts[3]
+        , data: MedS.transfer.getData(web3.eth.accounts[2],100)});
 }
 
 /*** Monitor ***/
 var startBlockNo = web3.eth.blockNumber - 5; //5건 전 블록부터 참조
 monitorBlockNo = Math.max(0, startBlockNo);
+
+function watchMedS() {
+    $('#meds_hp').text(MedS.balanceOf(web3.eth.accounts[1]).c[0]);
+    $('#meds_pt').text(MedS.balanceOf(web3.eth.accounts[2]).c[0]);
+    $('#meds_rs').text(MedS.balanceOf(web3.eth.accounts[3]).c[0]);
+
+    setTimeout(watchMedS, 1000);
+}
 
 // 감시 개시
 function startMonitor() {
@@ -191,3 +202,4 @@ function stopWatch() {
 }
 
 setTimeout(startMonitor, 500);
+setTimeout(watchMedS, 1000);
