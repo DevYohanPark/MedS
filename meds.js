@@ -5,7 +5,7 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 var stop = false;
 
 var startBlockNo = web3.eth.blockNumber - 20;
-monitorBlockNo = Math.max(0, startBlockNo)
+monitorBlockNo = Math.max(0, startBlockNo);
 
 // 감시 개시
 function startMonitor() {
@@ -18,7 +18,7 @@ function startMonitor() {
         insertBlockRow(result, table, monitorBlockNo);
     }
     setTimeout(function() {
-        watchBlock(table, i);
+        watchBlock(table, monitorBlockNo);
     }, 10000);
 }
 
@@ -27,7 +27,7 @@ function watchBlock(table, blockNumber) {
     if (stop) {
         return;
     }
-    if (blockNumber == web3.eth.blockNumber) {
+    if (blockNumber == parseInt(web3.eth.blockNumber)) {
         setTimeout(function() {
             watchBlock(table, blockNumber);
         }, 1000);
@@ -45,11 +45,11 @@ function insertBlockRow(result, table) {
     var row = table.insertRow();
     var td = row.insertCell(0);
     td.innerHTML = result.number;
-    var td = row.insertCell(1);
+    td = row.insertCell(1);
     if(result.timestamp) td.innerHTML = new Date(parseInt(result.timestamp) * 1000).toTimeString().split(' ')[0];
-    var td = row.insertCell(2);
+    td = row.insertCell(2);
     td.innerHTML = result.hash.substring(0,15)+"...";
-    var td = row.insertCell(3);
+    td = row.insertCell(3);
     if (result.transactions.length > 0) {
         insertTranRow(result.transactions, td);
     }
