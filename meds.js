@@ -99,22 +99,26 @@ function verify() {
     // sign 검증
     if(!signTxInfo || signTxInfo.from != web3.eth.accounts[1]) {
         alert("의사의 서명이 아닙니다.");
+        $('#result_rs').text("False");
         return;
     }
 
     // tx 에 대한 sign 여부 검증
     if(!txInfo || web3.sha3(tx).substring(0,32) != MedS.phrSigns(txInfo.from, tx.split(":")[0])) {
         alert("전달된 transaction 에 대한 서명이 아닙니다.");
+        $('#result_rs').text("False");
         return;
     }
 
     // hash 검증
     if(!txInfo || web3.sha3(data).substring(0,32) != MedS.phrHashes(txInfo.from, tx.split(":")[0])) {
         alert("전달된 data 와 hash 값이 일치하지 않습니다.");
+        $('#result_rs').text("False");
         return;
     }
 
     alert("진본 확인 완료");
+    $('#result_rs').text("True");
 }
 
 function sendMedS() {
