@@ -81,13 +81,45 @@ function handTx() {
     $('#tx_hp').val($('#tx_pt').val());
 }
 
-function handSignTxToResearcher() {
+function handDataToResearcher() {
     $('#data_rs').val($('#data_pt').val());
+    $('#tx_rs').val($('#tx_pt').val());
     $('#signtx_rs').val($('#signtx_pt').val());
 }
 
 /*** 연구소 ***/
+function verify() {
+    var data = $('#data_rs').val();
+    var tx = $('#tx_rs').val();
+    var signTx = $('#signtx_rs').val();
 
+    var txInfo = web3.eth.getTransaction(tx.split(":")[1]);
+    var signTxInfo = web3.eth.getTransaction(signTx);
+
+    // sign 검증
+    if(!signTxInfo || signTxInfo.from != web3.eth.accounts[1]) {
+        alert("의사의 서명이 아닙니다.");
+        return;
+    }
+
+    // tx 에 대한 sign 여부 검증
+    if(!txInfo || web3.sha3(tx).substring(0,32) != MedS.phrSigns(txInfo.from, tx.split(":")[0])) {
+        alert("전달된 transaction 에 대한 서명이 아닙니다.");
+        return;
+    }
+
+    // hash 검증
+    if(!txInfo || web3.sha3(data).substring(0,32) != MedS.phrHashes(txInfo.from, tx.split(":")[0])) {
+        alert("전달된 data 와 hash 값이 일치하지 않습니다.");
+        return;
+    }
+
+    alert("진본 확인 완료");
+}
+
+function sendMedS() {
+
+}
 
 /*** Monitor ***/
 var startBlockNo = web3.eth.blockNumber - 5; //5건 전 블록부터 참조

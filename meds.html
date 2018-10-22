@@ -62,7 +62,7 @@
     </p>
     <p>
         SignTx:&nbsp;<input type="text" id="signtx_pt" value="" size="40" disabled>
-        <input type="button" value="연구소로 전달" id="btn_handData_pt" onclick="handSignTxToResearcher();" />
+        <input type="button" value="연구소로 전달" id="btn_handData_pt" onclick="handDataToResearcher();" />
     </p>
 </div>
 <div id="div3">
@@ -71,13 +71,14 @@
         MedS:<label id="meds_rs">0</label>
     </p>
     <p>
-        Data:&nbsp;<input type="text" id="data_rs"  size="40" disabled><br>
-        SignTX:&nbsp;<input type="text" id="signtx_rs"  size="40" disabled>
-        <input type="button" value="진본확인" id="btn_rbc_rs" onclick="" />
+        Data:&nbsp;<input type="text" id="data_rs"  size="40"><br>
+        TX:&nbsp;<input type="text" id="tx_rs"  size="40"><br>
+        SignTX:&nbsp;<input type="text" id="signtx_rs"  size="40">
+        <input type="button" value="진본확인" id="btn_rbc_rs" onclick="verify()" />
     </p>
     <p>
         확인 결과:<label id="result_rs">False</label>
-        <input type="button" value="MedS 지급" id="btn_giveMedS_rs" onclick="" />
+        <input type="button" value="MedS 지급" id="btn_giveMedS_rs" onclick="sendMedS()" />
     </p>
 </div>
 <div id="div4">
