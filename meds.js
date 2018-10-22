@@ -4,8 +4,8 @@ web3.setProvider(provider);
 web3.eth.defaultAccount = web3.eth.accounts[0];
 var stop = false;
 
-var contractAddr = "0x40af181010193fbe1516877563c40cc88c72d95a";
-var ABI = [{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":false,"inputs":[{"name":"hashData","type":"string"}],"name":"putPhrHash","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"},{"name":"tokenDecimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"phrHashCount","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"phrHashes","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
+var contractAddr = "0xc3032677f47b7135eaba178121406e1de95dc849";
+var ABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"hashData","type":"string"}],"name":"putPhrHash","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"patient","type":"address"},{"name":"phrIndex","type":"uint8"},{"name":"signData","type":"string"}],"name":"putSign","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"phrHashCount","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"phrHashes","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"phrSigns","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"},{"name":"tokenDecimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 var MedS = web3.eth.contract(ABI).at(contractAddr);
 
 /*** 병원 ***/
@@ -26,12 +26,19 @@ function sign() {
         return;
     }
 
-    // sign
-    $('#sign_hp').val("sign");
+    $('#sign_hp').val(web3.sha3($('#tx_hp').val()));
 }
 
 function wbcSign() {
-    $('#signtx_hp').val("signTx");
+    var userData = $('#tx_hp').val().split(":");
+    var txInfo = web3.eth.getTransaction(userData[1]);
+    var signData = $('#sign_hp').val().substring(0,32);
+    var signTxHash = web3.eth.sendTransaction({
+        to: contractAddr
+        , from: web3.eth.accounts[1]
+        , data: MedS.putSign.getData(txInfo.from, userData[0], signData)});
+
+    $('#signtx_hp').val(signTxHash);
 }
 
 function handSignTxToPatient() {
@@ -49,13 +56,13 @@ function hashing() {
     $('#hash_pt').val(hash);
 }
 
-function readTxInfoFromBlockchain(txHash) {
+function readTxInfoFromBlockchain(phrIndex, txHash) {
     var txInfo = web3.eth.getTransaction(txHash);
     if(txInfo.blockNumber)
-        $('#tx_pt').val(txInfo.blockNumber + ":" + txInfo.transactionIndex + ":" + txHash);
+        $('#tx_pt').val(phrIndex + ":" + txHash);
     else
         setTimeout(function () {
-            readTxInfoFromBlockchain(txHash);
+            readTxInfoFromBlockchain(phrIndex, txHash);
         }, 1000)
 }
 
@@ -67,8 +74,7 @@ function wbcPhrHash() {
         , from: web3.eth.accounts[2]
         , data: MedS.putPhrHash.getData(hashData)});
 
-    //readTxInfoFromBlockchain(txHash);
-    $('#tx_pt').val(phrIndex + ":" + txHash);
+    readTxInfoFromBlockchain(phrIndex, txHash);
 }
 
 function handTx() {

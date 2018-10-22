@@ -50,6 +50,7 @@ contract MedS is BasicToken{
 
     mapping(address => uint8) public phrHashCount;
     mapping(address => mapping(uint256 => string)) public phrHashes;
+    mapping(address => mapping(uint256 => string)) public phrSigns;
 
     constructor(
         uint256 initialSupply,
@@ -64,5 +65,9 @@ contract MedS is BasicToken{
         uint8 index = phrHashCount[msg.sender]; // next index = count
         phrHashes[msg.sender][index] = hashData;
         phrHashCount[msg.sender] = index+1;
+    }
+
+    function putSign(address patient, uint8 phrIndex, string signData) public {
+        phrSigns[patient][phrIndex] = signData;
     }
 }
