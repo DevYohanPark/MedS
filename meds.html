@@ -8,27 +8,82 @@
     <script type="text/javascript" src="meds.js"></script>
 
     <style>
-        html, body { height: 100%; padding: 0; margin: 0; }
+        html, body { height: 600px; width: 900px; padding: 0; margin: 0; }
         div { width: 49%; height: 49%; float: left; }
         #div1 { margin: 5px 0 0 10px; border-style: solid; border-width: 1px; border-color: #444444; }
         #div2 { margin: 5px 0 0 0; border-style: solid; border-width: 1px; border-color: #444444; }
-        #div3 { margin: 0 0 0 10px; border-style: solid; border-width: 1px; border-color: #444444; }
-        #div4 { margin: 0 0 0 0; border-style: solid; border-width: 1px; border-color: #444444; }
+        #div3 { margin: 0 0 0 10px; border-style: solid; border-width: 1px; border-color: #444444; border-bottom-style: none; }
+        #div4 { margin: 0 0 0 0; border-style: solid; border-width: 1px; border-color: #444444; border-bottom-style: none; }
         p { margin: 5px; }
+        input[type="text"]:disabled { background: #dddddd; }
+        table { margin: 5px; }
     </style>
 </head>
 <body>
 <div id="div1">
-    <p>병원 0x21861ae28692d7b43b1453597ab51b29fd373fbe</p>
+    <p>
+        병원 <input type="text" id="addr_hp" value="0x21861ae28692d7b43b1453597ab51b29fd373fbe" size="20">
+        MedS:<label id="meds_hp">0</label>
+    </p>
+    <p>
+        Data:&nbsp;<input type="text" id="data_hp" value="" size="40">
+        <input type="button" value="환자에게 전달" id="btn_handdata_hp" onclick="" />
+    </p>
+    <p>
+        Tx:&nbsp;<input type="text" id="tx_hp" value="" size="40" disabled><br>
+        Hash:&nbsp;<input type="text" id="hash_hp" value="" size="40" disabled>
+        <input type="button" value="진본확인+Sign" id="btn_sign_hp" onclick="" />
+    </p>
+    <p>
+        Sign:&nbsp;<input type="text" id="sign_hp" value="" size="40" disabled>
+        <input type="button" value="블록체인 기록" id="btn_wbc_hp" onclick="" />
+    </p>
+    <p>
+        SignTx:&nbsp;<input type="text" id="signtx_hp" value="" size="40" disabled>
+        <input type="button" value="환자에게 전달" id="btn_handsigntx_hp" onclick="" />
+    </p>
 </div>
 <div id="div2">
-    <p>환자 0x4908823d045ae0b5c569b85b881a3c729bd33ec6</p>
+    <p>
+        환자 <input type="text" id="addr_pt" value="0x4908823d045ae0b5c569b85b881a3c729bd33ec6" size="20">
+        MedS:<label id="meds_pt">0</label>
+    </p>
+    <p>
+        Data:&nbsp;<input type="text" id="data_pt"  size="40" disabled>
+        <input type="button" value="hasing" id="btn_hash_pt" onclick="" />
+    </p>
+    <p>
+        Hash:&nbsp;<input type="text" id="hash_pt"  size="40" disabled>
+        <input type="button" value="블록체인 기록" id="btn_wbc_pt" onclick="" />
+    </p>
+    <p>
+        Tx:&nbsp;<input type="text" id="tx_pt"  size="40" disabled>
+        <input type="button" value="병원으로 전달" id="btn_handtx_pt" onclick="" />
+    </p>
+    <p>
+        SignTx:&nbsp;<input type="text" id="signtx_pt" value="" size="40" disabled>
+        <input type="button" value="연구소로 전달" id="btn_handData_pt" onclick="" />
+    </p>
 </div>
 <div id="div3">
-    <p>연구소 0x4a9dd6f197a9133d0234d92514957351f9999f76</p>
+    <p>
+        연구소 <input type="text" id="addr_rs" value="0x4a9dd6f197a9133d0234d92514957351f9999f76" size="20">
+        MedS:<label id="meds_rs">0</label>
+    </p>
+    <p>
+        Data:&nbsp;<input type="text" id="data_rs"  size="40" disabled><br>
+        SignTX:&nbsp;<input type="text" id="tx_rs"  size="40" disabled>
+        <input type="button" value="진본확인" id="btn_rbc_rs" onclick="" />
+    </p>
+    <p>
+        확인 결과:<label id="result_rs">False</label>
+        <input type="button" value="MedS 지급" id="btn_giveMedS_rs" onclick="" />
+    </p>
 </div>
 <div id="div4">
-    <p>Blockchain Monitor - miner:0x442ca7c75118e0eeeb1b3bc641cf25f2e64f508e</p>
+    <p>
+        Blockchain Monitor - miner:<input type="text" id="addr_mn" value="0x442ca7c75118e0eeeb1b3bc641cf25f2e64f508e" size="20">
+    </p>
     <p>
         <input type="button" value="start" onclick="startMonitor();" />
         <input type="button" value="stop" onclick="stopWatch();" />

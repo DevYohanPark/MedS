@@ -14,7 +14,7 @@ function startMonitor() {
     var table = document.getElementById('tbMonitor');
     for (; monitorBlockNo < web3.eth.blockNumber; monitorBlockNo++) {
         var result = web3.eth.getBlock(monitorBlockNo);
-        console.log(result);
+        //console.log(result);
         insertBlockRow(result, table, monitorBlockNo);
     }
     setTimeout(function() {
