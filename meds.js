@@ -4,18 +4,18 @@ web3.setProvider(provider);
 web3.eth.defaultAccount = web3.eth.accounts[0];
 var stop = false;
 
+var startBlockNo = web3.eth.blockNumber - 20;
+monitorBlockNo = Math.max(0, startBlockNo)
+
 // 감시 개시
 function startMonitor() {
     stop = false;
     //20건 전 블록부터 참조
-    var startBlockNo = web3.eth.blockNumber - 20;
-    startBlockNo = Math.max(0, startBlockNo)
     var table = document.getElementById('tbMonitor');
-    var i = startBlockNo;
-    for (; i < web3.eth.blockNumber; i++) {
-        var result = web3.eth.getBlock(i);
+    for (; monitorBlockNo < web3.eth.blockNumber; monitorBlockNo++) {
+        var result = web3.eth.getBlock(monitorBlockNo);
         console.log(result);
-        insertBlockRow(result, table, i);
+        insertBlockRow(result, table, monitorBlockNo);
     }
     setTimeout(function() {
         watchBlock(table, i);
