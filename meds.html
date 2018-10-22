@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>MedS - MED in solidity</title>
 
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
     <script type="text/javascript" src="meds.js"></script>
 
@@ -26,12 +27,11 @@
         MedS:<label id="meds_hp">0</label>
     </p>
     <p>
-        Data:&nbsp;<input type="text" id="data_hp" value="" size="40">
-        <input type="button" value="환자에게 전달" id="btn_handdata_hp" onclick="" />
+        Data:&nbsp;<input type="text" id="data_hp" value="abcd" size="40">
+        <input type="button" value="환자에게 전달" id="btn_handdata_hp" onclick="handData();" />
     </p>
     <p>
-        Tx:&nbsp;<input type="text" id="tx_hp" value="" size="40" disabled><br>
-        Hash:&nbsp;<input type="text" id="hash_hp" value="" size="40" disabled>
+        Tx:&nbsp;<input type="text" id="tx_hp" value="" size="40" disabled>
         <input type="button" value="진본확인+Sign" id="btn_sign_hp" onclick="" />
     </p>
     <p>
@@ -50,15 +50,15 @@
     </p>
     <p>
         Data:&nbsp;<input type="text" id="data_pt"  size="40" disabled>
-        <input type="button" value="hasing" id="btn_hash_pt" onclick="" />
+        <input type="button" value="hasing" id="btn_hash_pt" onclick="hashing();" />
     </p>
     <p>
         Hash:&nbsp;<input type="text" id="hash_pt"  size="40" disabled>
-        <input type="button" value="블록체인 기록" id="btn_wbc_pt" onclick="" />
+        <input type="button" value="블록체인 기록" id="btn_wbc_pt" onclick="wbcPhrHash();" />
     </p>
     <p>
         Tx:&nbsp;<input type="text" id="tx_pt"  size="40" disabled>
-        <input type="button" value="병원으로 전달" id="btn_handtx_pt" onclick="" />
+        <input type="button" value="병원으로 전달" id="btn_handtx_pt" onclick="handTx();" />
     </p>
     <p>
         SignTx:&nbsp;<input type="text" id="signtx_pt" value="" size="40" disabled>
@@ -85,8 +85,10 @@
         Blockchain Monitor - miner:<input type="text" id="addr_mn" value="0x442ca7c75118e0eeeb1b3bc641cf25f2e64f508e" size="20">
     </p>
     <p>
+        <!--
         <input type="button" value="start" onclick="startMonitor();" />
         <input type="button" value="stop" onclick="stopWatch();" />
+        -->
     </p>
     <p>
         <table id="tbMonitor" border="1">
