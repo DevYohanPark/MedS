@@ -6,8 +6,43 @@
 
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
     <script type="text/javascript" src="meds.js"></script>
+
+    <style>
+        html, body { height: 100%; padding: 0; margin: 0; }
+        div { width: 49%; height: 49%; float: left; }
+        #div1 { margin: 5px 0 0 10px; border-style: solid; border-width: 1px; border-color: #444444; }
+        #div2 { margin: 5px 0 0 0; border-style: solid; border-width: 1px; border-color: #444444; }
+        #div3 { margin: 0 0 0 10px; border-style: solid; border-width: 1px; border-color: #444444; }
+        #div4 { margin: 0 0 0 0; border-style: solid; border-width: 1px; border-color: #444444; }
+        p { margin: 5px; }
+    </style>
 </head>
 <body>
-MEDS
+<div id="div1">
+    <p>병원 0x21861ae28692d7b43b1453597ab51b29fd373fbe</p>
+</div>
+<div id="div2">
+    <p>환자 0x4908823d045ae0b5c569b85b881a3c729bd33ec6</p>
+</div>
+<div id="div3">
+    <p>연구소 0x4a9dd6f197a9133d0234d92514957351f9999f76</p>
+</div>
+<div id="div4">
+    <p>Blockchain Monitor - miner:0x442ca7c75118e0eeeb1b3bc641cf25f2e64f508e</p>
+    <p>
+        <input type="button" value="start" onclick="startMonitor();" />
+        <input type="button" value="stop" onclick="stopWatch();" />
+    </p>
+    <p>
+        <table id="tbMonitor" border="1">
+            <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>BlockHash</th>
+                <th>Transaction</th>
+            </tr>
+        </table>
+    </p>
+</div>
 </body>
 </html>
