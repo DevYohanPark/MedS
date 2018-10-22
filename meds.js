@@ -23,6 +23,18 @@ function hashing() {
     $('#hash_pt').val(hash);
 }
 
+function sign() {
+    $('#sign_hp').val("sign");
+}
+
+function wbcSign() {
+    $('#signtx_hp').val("signTx");
+}
+
+function handSignTxToPatient() {
+    $('#signtx_pt').val($('#signtx_hp').val());
+}
+
 function readTxInfoFromBlockchain(txHash) {
     var txInfo = web3.eth.getTransaction(txHash);
     if(txInfo.blockNumber)
@@ -41,6 +53,11 @@ function wbcPhrHash() {
 
 function handTx() {
     $('#tx_hp').val($('#tx_pt').val());
+}
+
+function handSignTxToResearcher() {
+    $('#data_rs').val($('#data_pt').val());
+    $('#signtx_rs').val($('#signtx_pt').val());
 }
 
 /*** 연구소 ***/

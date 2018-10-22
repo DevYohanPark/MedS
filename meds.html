@@ -32,15 +32,15 @@
     </p>
     <p>
         Tx:&nbsp;<input type="text" id="tx_hp" value="" size="40" disabled>
-        <input type="button" value="진본확인+Sign" id="btn_sign_hp" onclick="" />
+        <input type="button" value="진본확인+Sign" id="btn_sign_hp" onclick="sign();" />
     </p>
     <p>
         Sign:&nbsp;<input type="text" id="sign_hp" value="" size="40" disabled>
-        <input type="button" value="블록체인 기록" id="btn_wbc_hp" onclick="" />
+        <input type="button" value="블록체인 기록" id="btn_wbc_hp" onclick="wbcSign();" />
     </p>
     <p>
         SignTx:&nbsp;<input type="text" id="signtx_hp" value="" size="40" disabled>
-        <input type="button" value="환자에게 전달" id="btn_handsigntx_hp" onclick="" />
+        <input type="button" value="환자에게 전달" id="btn_handsigntx_hp" onclick="handSignTxToPatient();" />
     </p>
 </div>
 <div id="div2">
@@ -62,7 +62,7 @@
     </p>
     <p>
         SignTx:&nbsp;<input type="text" id="signtx_pt" value="" size="40" disabled>
-        <input type="button" value="연구소로 전달" id="btn_handData_pt" onclick="" />
+        <input type="button" value="연구소로 전달" id="btn_handData_pt" onclick="handSignTxToResearcher();" />
     </p>
 </div>
 <div id="div3">
@@ -72,7 +72,7 @@
     </p>
     <p>
         Data:&nbsp;<input type="text" id="data_rs"  size="40" disabled><br>
-        SignTX:&nbsp;<input type="text" id="tx_rs"  size="40" disabled>
+        SignTX:&nbsp;<input type="text" id="signtx_rs"  size="40" disabled>
         <input type="button" value="진본확인" id="btn_rbc_rs" onclick="" />
     </p>
     <p>
