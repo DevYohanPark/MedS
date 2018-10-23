@@ -1,0 +1,50 @@
+genesis.config 파일의 chainId 를 0이 아닌 숫자(ex.123)로 변경
+----
+./geth init genesis.json --datadir "local_data"
+./geth console --datadir "local_data" --rpc --rpcapi "eth,net,web3,personal" --rpccorsdomain "*"
+----
+personal.newAccount()
+personal.unlockAccount(eth.accounts[0], "user0", 60*60*24)
+eth.sendTransaction({from:eth.accounts[0],to:eth.accounts[1],value:web3.toWei(1,"ether")})
+----
+* Mine only when there are transactions
+https://ethereum.stackexchange.com/questions/3151/how-to-make-miner-to-mine-only-when-there-are-pending-transactions
+
+var mining_threads = 1
+
+function checkWork() {
+    if (eth.getBlock("pending").transactions.length > 0) {
+        if (eth.mining) return;
+        console.log("== Pending transactions! Mining...");
+        miner.start(mining_threads);
+    } else {
+        miner.stop();
+        console.log("== No transactions! Mining stopped.");
+    }
+}
+
+eth.filter("latest", function(err, block) { checkWork(); });
+eth.filter("pending", function(err, block) { checkWork(); });
+
+checkWork();
+----
+https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-api
+
+* eth_getTransactionReceipt - curl
+curl -H "Content-Type:application/json" --data '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0xb7e60cd05d1eed7e2ee014198f5844516584e2ee5aa1fcd224f66ff819915287"],"id":1}' http://localhost:8545
+
+* eth_getTransactionReceipt - ajax
+var resultData;
+$.ajax({type:"POST", contentType:"application/json", url:"http://localhost:8545"
+, data:'{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0xb7e60cd05d1eed7e2ee014198f5844516584e2ee5aa1fcd224f66ff819915287"],"id":1}'
+, complete: function(data) {
+    resultData = JSON.parse(data.responseText).result;
+    console.log(resultData);
+}});
+
+* eth_blockNumber - ajax
+var resultData;
+$.ajax({type:"POST", contentType:"application/json", url:"http://localhost:8545"
+, data:'{"jsonrpc":"2.0","method":"eth_blockNumber","params":[""],"id":1}'
+, complete: function(data) {     resultData = JSON.parse(data.responseText).result;
+    console.log(parseInt(resultData,16)); }});
