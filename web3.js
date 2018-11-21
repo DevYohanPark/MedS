@@ -1,3 +1,14 @@
+/***
+ * web3.js 의 구조 분석을 위한 snapshot.
+ * 본 파일에 선언된 객체는 프로젝트에서 사용 되지 않음.
+ *
+ * geth 에서 web3 객체를 확인 해 보면 아래와 같은 구조를 갖는 데,
+ * api version 을 보면 0.20.1 이지만 personal api 를 제공 하고 있다.
+ * ethereum wiki 에 기재된 0.2x.x. 버전 api spec 문서에는 personal api 가 없고,
+ * web3js.readthdocs.io 에 기재된 1.0 버전 api spec 문서에는 personal api 가 있는 것으로 보아
+ * api 와 spec 문서의 버전이 맞지 않는 것으로 보인다.
+ ***/
+
 var web3 = {
     admin: {
         datadir: "/Users/parkyohan/repositories/go-ethereum/build/bin/local_data",
