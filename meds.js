@@ -185,6 +185,7 @@ var contractAddr = 0;
 var MedS = null;
 
 var startBlockNo = 0;
+var monitorBlockNo;
 
 $().ready(function() {
     web3 = new Web3();
